@@ -1,0 +1,996 @@
+<title>Dossier 108</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Caveat:wght@500;700&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --ground:#06070a;
+  --ground-2:#0b0d13;
+  --surface:rgba(255,255,255,.035);
+  --surface-hi:rgba(255,255,255,.06);
+  --line:rgba(255,255,255,.08);
+  --line-hi:rgba(255,255,255,.16);
+  --text:#f1efea;
+  --muted:#8f93a0;
+  --faint:#5b5f6b;
+  --ink:#5875ff;          /* bleu stylo bille */
+  --ink-soft:rgba(88,117,255,.18);
+  --gold:#f2cf86;
+  --ok:#7fd6a4;
+  --warn:#f2cf86;
+  --bad:#ff8a7a;
+  --neutral:#a9b0c4;
+  --paper:#f6f4ec;
+  --paper-ink:#1f3bb3;
+  --paper-rule:#c9d3f2;
+  --paper-rule-strong:#9fb0e6;
+  --margin:#e0525c;
+  --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body:"Hanken Grotesk", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --hand:"Caveat", "Bradley Hand", "Segoe Print", cursive;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ground);
+  color:var(--text);
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.02em}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.eyebrow b{color:var(--gold);font-weight:600}
+
+/* ---------- NAV ---------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  padding-top:env(safe-area-inset-top,0px);
+  background:rgba(6,7,10,.55);
+  backdrop-filter:blur(22px) saturate(160%);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:52px;gap:16px}
+.logo{font-family:var(--display);font-weight:700;font-size:18px;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo i{width:9px;height:9px;border-radius:50%;background:var(--ink);box-shadow:0 0 14px var(--ink)}
+.nav-links{display:flex;gap:4px}
+.nav-links a{font-size:14px;text-decoration:none;color:var(--muted);padding:6px 12px;border-radius:999px;transition:color .2s,background .2s}
+.nav-links a:hover{color:var(--text);background:var(--surface-hi)}
+@media (max-width:640px){.nav-links a:not(.keep){display:none}}
+.progress{position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:linear-gradient(90deg,var(--ink),var(--gold));transform-origin:0 50%;transform:scaleX(0)}
+
+/* ---------- HERO ---------- */
+.hero{
+  position:relative;
+  min-height:clamp(600px,92vh,900px);
+  display:flex;align-items:flex-end;
+  overflow:hidden;
+  background:
+    radial-gradient(60% 50% at 50% 42%, rgba(88,117,255,.16), transparent 70%),
+    radial-gradient(40% 30% at 70% 70%, rgba(242,207,134,.07), transparent 70%),
+    var(--ground);
+}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab}
+.hero-fallback{
+  position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;
+  font-family:var(--display);font-weight:800;font-size:clamp(140px,34vw,420px);letter-spacing:-.06em;
+  background:linear-gradient(180deg,#fff,#6d7cff 70%,#2a2f55);-webkit-background-clip:text;background-clip:text;color:transparent;
+  opacity:.9;transition:opacity .8s;
+}
+.hero.gl-ready .hero-fallback{opacity:0}
+.hero-copy{position:relative;z-index:2;width:100%;padding-block:0 56px;pointer-events:none}
+.hero-copy .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:end}
+.hero h1{font-size:clamp(56px,9vw,128px);font-weight:700;line-height:.9;letter-spacing:-.045em}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--text),var(--ink) 55%,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{color:#c4c6cf;font-size:18px;max-width:46ch}
+.hero-sub strong{color:var(--text);font-weight:600}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;pointer-events:auto}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;
+  padding:12px 20px;border-radius:999px;border:1px solid var(--line-hi);background:var(--surface-hi);
+  font-size:15px;font-weight:500;transition:transform .25s var(--ease),background .25s,border-color .25s;
+}
+.btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.1)}
+.btn.primary{background:var(--text);color:#07080b;border-color:var(--text)}
+.btn.primary:hover{background:#fff}
+.hint{position:absolute;z-index:2;top:calc(72px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);white-space:nowrap;pointer-events:none}
+@media (max-width:760px){
+  .hero-copy .wrap{grid-template-columns:1fr;gap:16px}
+  .hero{min-height:clamp(620px,96vh,820px)}
+  .hint{display:none}
+}
+
+/* ---------- SECTIONS ---------- */
+section.block{padding-block:120px}
+@media (max-width:760px){section.block{padding-block:80px}}
+.sec-head{display:grid;gap:14px;margin-bottom:48px;max-width:760px}
+.sec-head h2{font-size:clamp(36px,5.2vw,64px);font-weight:600;line-height:1}
+.sec-head p{color:var(--muted);font-size:18px;max-width:60ch}
+
+/* ---------- SUJET ---------- */
+.sujet{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:start}
+@media (max-width:860px){.sujet{grid-template-columns:1fr}}
+.lede{font-family:var(--display);font-weight:400;font-size:clamp(24px,2.8vw,34px);line-height:1.25;letter-spacing:-.015em;color:#d9d9dd}
+.lede mark{background:none;color:var(--gold)}
+.fiche{
+  border:1px solid var(--line);border-radius:24px;background:var(--surface);
+  backdrop-filter:blur(20px);padding:8px 24px;font-size:15px;
+}
+.fiche-row{display:grid;grid-template-columns:130px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.fiche-row:last-child{border-bottom:0}
+.fiche-row dt{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding-top:3px}
+.fiche-row dd{margin:0}
+.fiche-row dd .redacted{background:#000;color:transparent;border-radius:3px;user-select:none;padding:0 4px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:72px;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--line)}
+.stat{background:var(--ground-2);padding:28px 24px;display:grid;gap:4px}
+.stat b{font-family:var(--display);font-size:clamp(40px,5vw,60px);font-weight:600;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:14px}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* ---------- CARNET ---------- */
+.carnet-wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+@media (max-width:960px){.carnet-wrap{grid-template-columns:1fr}}
+.paper{
+  --rule:32px;
+  position:relative;
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(90deg, transparent 63px, var(--margin) 63px, var(--margin) 65px, transparent 65px),
+    repeating-linear-gradient(0deg, var(--paper-rule-strong) 0 1px, transparent 1px var(--rule)),
+    repeating-linear-gradient(0deg, var(--paper-rule) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(90deg, rgba(160,120,200,.18) 0 1px, transparent 1px var(--rule));
+  color:var(--paper-ink);
+  border-radius:6px;
+  padding:32px 24px 40px 84px;
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.8), 0 0 0 1px rgba(0,0,0,.2);
+  transform:rotate(-1.2deg);
+  font-family:var(--hand);font-size:25px;line-height:var(--rule);
+}
+.paper::before,.paper::after{content:"";position:absolute;left:22px;width:18px;height:18px;border-radius:50%;background:var(--ground);box-shadow:inset 0 2px 3px rgba(0,0,0,.6)}
+.paper::before{top:22%}.paper::after{top:72%}
+.paper h3{font-family:var(--hand);font-size:34px;font-weight:700;letter-spacing:0;line-height:var(--rule);margin-bottom:0}
+.paper ul{list-style:none;margin:0;padding:0}
+.paper li{margin:0}
+.note{
+  all:unset;cursor:pointer;display:inline;line-height:var(--rule);
+  background-image:linear-gradient(transparent 55%, rgba(255,226,92,0) 55%);
+  transition:background-image .2s;
+}
+.note:hover,.note:focus-visible{background-image:linear-gradient(transparent 50%, rgba(255,226,92,.75) 50%, rgba(255,226,92,.75) 88%, transparent 88%)}
+.note:focus-visible{outline:2px dashed var(--paper-ink);outline-offset:2px}
+.paper .sub{padding-left:32px}
+.paper .strike{text-decoration:line-through;text-decoration-color:var(--margin)}
+.paper .corr{font-size:20px;color:var(--margin)}
+@media (max-width:520px){.paper{font-size:20px;padding:32px 14px 32px 70px}.paper h3{font-size:28px}.paper::before,.paper::after{left:16px}}
+.carnet-caption{display:grid;gap:18px}
+.carnet-caption p{color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ---------- PISTES ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:6px;padding:5px;border-radius:999px;background:var(--surface);border:1px solid var(--line);width:max-content;max-width:100%;margin-bottom:32px}
+.filter{border:0;background:none;cursor:pointer;padding:8px 16px;border-radius:999px;font-size:14px;color:var(--muted);transition:background .25s var(--ease),color .25s}
+.filter:hover{color:var(--text)}
+.filter[aria-pressed="true"]{background:var(--text);color:#07080b}
+@media (max-width:640px){.filters{border-radius:20px}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.card{
+  --mx:50%;--my:50%;--rx:0deg;--ry:0deg;
+  position:relative;text-align:left;cursor:pointer;
+  border:1px solid var(--line);border-radius:22px;padding:22px;
+  background:
+    radial-gradient(420px circle at var(--mx) var(--my), rgba(88,117,255,.16), transparent 45%),
+    var(--surface);
+  display:grid;grid-template-rows:auto auto auto 1fr auto;gap:12px;
+  transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition:transform .35s var(--ease),border-color .3s,background-color .3s;
+  animation:pop .5s var(--ease) both;
+  min-height:280px;
+}
+.card:hover{border-color:var(--line-hi)}
+.card-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.pill{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;white-space:nowrap;border:1px solid currentColor}
+.pill.ok{color:var(--ok)}.pill.warn{color:var(--warn)}.pill.bad{color:var(--bad)}.pill.neutral{color:var(--neutral)}
+.card .fig{font-family:var(--mono);font-size:14px;color:var(--gold);word-break:break-word}
+.card h3{font-size:24px;font-weight:600;line-height:1.1}
+.card p{color:var(--muted);font-size:15px}
+.meter{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--faint);font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.dots{display:flex;gap:4px}
+.dots i{width:16px;height:4px;border-radius:2px;background:var(--line-hi)}
+.dots i.on{background:var(--ink);box-shadow:0 0 8px rgba(88,117,255,.6)}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+
+/* ---------- SHEET ---------- */
+dialog.sheet{
+  width:min(640px, calc(100% - 32px));max-height:min(86vh,820px);
+  border:1px solid var(--line-hi);border-radius:28px;padding:0;color:var(--text);
+  background:rgba(17,19,25,.92);backdrop-filter:blur(30px) saturate(150%);-webkit-backdrop-filter:blur(30px) saturate(150%);
+  box-shadow:0 50px 120px -20px rgba(0,0,0,.9);
+  overflow:auto;
+}
+dialog.sheet[open]{animation:sheetIn .45s var(--ease)}
+dialog.sheet::backdrop{background:rgba(3,4,8,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+@keyframes sheetIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+.sheet-in{padding:28px;display:grid;gap:18px}
+.sheet-close{position:sticky;top:12px;float:right;margin:12px 12px 0 0;width:34px;height:34px;border-radius:50%;border:1px solid var(--line-hi);background:var(--surface-hi);cursor:pointer;display:grid;place-items:center;z-index:2}
+.sheet h3{font-size:34px;line-height:1.05}
+.sheet .body{color:#c9cbd3;display:grid;gap:12px}
+.check{border-left:2px solid var(--gold);padding:10px 14px;background:rgba(242,207,134,.06);border-radius:0 12px 12px 0;font-size:15px}
+.check b{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.viz{border:1px solid var(--line);border-radius:18px;padding:18px;background:rgba(0,0,0,.25)}
+.viz-label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+.sum{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--mono);font-size:20px}
+.sum span{padding:6px 12px;border-radius:10px;background:var(--surface-hi);animation:pop .5s var(--ease) both}
+.sum .eq{background:var(--ink);color:#fff;font-weight:600}
+.field-row{display:flex;flex-wrap:wrap;gap:12px;align-items:end}
+.field{display:grid;gap:6px;font-size:13px;color:var(--muted)}
+.field input{font:inherit;font-size:16px;color:var(--text);background:var(--surface-hi);border:1px solid var(--line-hi);border-radius:12px;padding:10px 12px;min-width:0}
+.big-out{font-family:var(--display);font-size:44px;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.big-out small{font-family:var(--body);font-size:14px;color:var(--muted);font-weight:400;letter-spacing:0;display:block;margin-top:6px}
+.dotgrid{display:grid;grid-template-columns:repeat(18,1fr);gap:4px}
+.dotgrid i{aspect-ratio:1;border-radius:50%;background:var(--gold);animation:pop .4s var(--ease) both;max-width:100%}
+.unogrid{display:grid;grid-template-columns:repeat(18,1fr);gap:3px}
+.unogrid i{aspect-ratio:2/3;border-radius:3px;animation:pop .4s var(--ease) both}
+.viz svg{width:100%;height:auto;display:block;max-width:100%}
+.bits-view{display:flex;gap:6px;flex-wrap:wrap;font-family:var(--mono)}
+.bits-view div{display:grid;gap:4px;text-align:center;font-size:11px;color:var(--faint)}
+.bits-view b{font-size:22px;width:36px;height:44px;display:grid;place-items:center;border-radius:10px;background:var(--surface-hi);color:var(--faint)}
+.bits-view b.one{background:var(--ink);color:#fff}
+
+/* ---------- VÉRITÉ ---------- */
+.verite{position:relative;background:linear-gradient(180deg,var(--ground),#090b14 40%,var(--ground))}
+.lock{
+  border:1px solid var(--line);border-radius:28px;padding:32px;background:var(--surface);
+  display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;margin-bottom:40px;
+}
+@media (max-width:860px){.lock{grid-template-columns:1fr;padding:24px}}
+.lock h3{font-size:28px;margin-bottom:8px}
+.lock p{color:var(--muted);font-size:15px;max-width:52ch}
+.bits{display:flex;gap:8px;flex-wrap:wrap}
+.bit{
+  width:52px;height:68px;border-radius:14px;border:1px solid var(--line-hi);background:var(--surface-hi);cursor:pointer;
+  display:grid;place-items:center;font-family:var(--mono);font-size:26px;font-weight:600;color:var(--faint);
+  transition:background .25s var(--ease),color .25s,transform .2s,box-shadow .3s;position:relative;
+}
+.bit small{position:absolute;bottom:-20px;font-size:10px;color:var(--faint);font-weight:400}
+.bit:hover{transform:translateY(-2px)}
+.bit[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);box-shadow:0 0 24px rgba(88,117,255,.5)}
+@media (max-width:520px){.bit{width:calc((100vw - 32px - 48px - 56px)/8);min-width:30px;height:54px;font-size:20px}}
+.dial{display:grid;justify-items:center;gap:6px;min-width:160px}
+.dial b{font-family:var(--display);font-size:72px;font-weight:700;letter-spacing:-.05em;line-height:1;font-variant-numeric:tabular-nums;transition:color .3s}
+.dial span{font-family:var(--mono);font-size:12px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase}
+.lock-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px;align-items:center}
+.lock-status{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.unlocked .dial b{color:var(--ok)}
+.unlocked .lock-status{color:var(--ok)}
+
+.report{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:start}
+@media (max-width:960px){.report{grid-template-columns:1fr}}
+.doc{
+  background:var(--paper);color:#1b1c22;border-radius:8px;padding:40px 36px;position:relative;
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.8);font-size:17px;line-height:1.75;
+}
+@media (max-width:520px){.doc{padding:28px 20px}}
+.doc .head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a6d78;border-bottom:1px solid #d8d4c6;padding-bottom:14px;margin-bottom:20px}
+.doc h3{font-size:32px;color:#101116;margin-bottom:16px;line-height:1.05}
+.doc p+p{margin-top:14px}
+.rd{background:#111;color:transparent;border-radius:2px;padding:0 3px;box-decoration-break:clone;-webkit-box-decoration-break:clone;transition:background-color .7s var(--ease),color .7s var(--ease);transition-delay:calc(var(--i,0) * .35s)}
+.unlocked .rd{background:rgba(255,226,92,.55);color:#101116}
+.stamp{
+  position:absolute;right:24px;top:84px;transform:rotate(-12deg) scale(1.6);opacity:0;
+  font-family:var(--mono);font-weight:600;font-size:14px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--margin);border:2px solid var(--margin);border-radius:6px;padding:6px 10px;
+  transition:opacity .3s 2.2s, transform .4s cubic-bezier(.3,1.6,.5,1) 2.2s;pointer-events:none;
+}
+.unlocked .stamp{opacity:.85;transform:rotate(-12deg) scale(1)}
+.handnote{font-family:var(--hand);font-size:28px;line-height:1.2;color:var(--paper-ink);margin-top:22px;opacity:0;transform:translateY(8px);transition:opacity .8s 2.8s,transform .8s 2.8s}
+.unlocked .handnote{opacity:1;transform:none}
+.tally{border:1px solid var(--line);border-radius:24px;background:var(--surface);padding:10px 20px}
+.tally-title{padding:12px 0;border-bottom:1px solid var(--line)}
+.tally ol{list-style:none;margin:0;padding:0}
+.tally li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.tally li:last-child{border-bottom:0}
+.tally li .n{font-family:var(--mono);font-size:11px;color:var(--faint);margin-right:10px;font-variant-numeric:tabular-nums}
+.tally li .lbl{transition:color .4s calc(var(--i) * .08s),text-decoration-color .4s calc(var(--i) * .08s);text-decoration:line-through;text-decoration-color:transparent}
+.tally li .st{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-hi);border-radius:4px;padding:2px 6px;white-space:nowrap;transition:all .4s calc(var(--i) * .08s)}
+.unlocked .tally li .lbl{color:var(--faint);text-decoration-color:var(--bad)}
+.unlocked .tally li .st{color:var(--bad);border-color:var(--bad)}
+.tally li.win .lbl{font-weight:600}
+.unlocked .tally li.win .lbl{color:var(--ok);text-decoration:none}
+.unlocked .tally li.win .st{color:var(--ok);border-color:var(--ok)}
+
+/* ---------- FOOTER ---------- */
+footer{border-top:1px solid var(--line);padding-block:40px;color:var(--faint);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer code{font-family:var(--mono);color:var(--muted)}
+
+/* ---------- TOAST + BURST ---------- */
+#burst{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:80}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:90;
+  padding:12px 18px;border-radius:999px;background:rgba(17,19,25,.9);border:1px solid var(--line-hi);backdrop-filter:blur(20px);font-size:14px;transition:all .4s var(--ease);pointer-events:none;max-width:calc(100% - 32px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- SCROLL-DRIVEN ---------- */
+@supports (animation-timeline: view()){
+  .reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 0% cover 30%}
+  @keyframes rise{from{opacity:.15;transform:translateY(48px)}to{opacity:1;transform:none}}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important;scroll-behavior:auto!important}
+  .reveal{animation:none!important}
+}
+</style>
+
+<nav class="nav" aria-label="Navigation principale">
+  <div class="wrap nav-in">
+    <a class="logo" href="#hero"><i></i>108</a>
+    <div class="nav-links">
+      <a href="#sujet">Le sujet</a>
+      <a href="#carnet">Le carnet</a>
+      <a href="#pistes" class="keep">Les pistes</a>
+      <a href="#verite" class="keep">La vérité</a>
+    </div>
+  </div>
+  <div class="progress" id="progress"></div>
+</nav>
+
+<header class="hero" id="hero">
+  <div class="hero-fallback" aria-hidden="true">108</div>
+  <canvas id="gl" aria-label="Le nombre 108 en 3D, entouré de 108 perles"></canvas>
+  <div class="hint">Survolez · cliquez un chiffre · faites défiler</div>
+  <div class="hero-copy">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow" style="margin-bottom:18px">Dossier n° <b>108</b> · Classé confidentiel</p>
+        <h1>Cent huit.<br><em>Mais pourquoi ?</em></h1>
+      </div>
+      <div>
+        <p class="hero-sub">Le professeur <strong>Pablo Espana Guterez</strong> le glisse partout : dans ses exemples, ses énoncés, ses digressions. Nous avons relevé chaque indice. <strong>17 pistes, 1 vérité.</strong></p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#pistes">Ouvrir le dossier</a>
+          <a class="btn" href="#verite">Aller à la vérité</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="block" id="sujet">
+    <div class="wrap">
+      <div class="sujet reveal">
+        <div class="sec-head" style="margin:0">
+          <p class="eyebrow">Le sujet</p>
+          <h2>Un nombre qui revient trop souvent pour être un hasard.</h2>
+          <p class="lede" style="margin-top:12px">Au début, on n'y prête pas attention. Puis <mark>108</mark> réapparaît dans une énigme, dans un exemple, dans une anecdote. Alors la classe ouvre un carnet et commence à tout noter.</p>
+        </div>
+        <dl class="fiche" aria-label="Fiche du sujet">
+          <div class="fiche-row"><dt>Sujet</dt><dd>Pr. Pablo Espana Guterez</dd></div>
+          <div class="fiche-row"><dt>Signe distinctif</dt><dd>Mentionne le nombre 108 sans raison apparente</dd></div>
+          <div class="fiche-row"><dt>Première occurrence</dt><dd>L'énigme du jeu des cavaliers</dd></div>
+          <div class="fiche-row"><dt>Pistes relevées</dt><dd>17, réparties sur 6 domaines</dd></div>
+          <div class="fiche-row"><dt>Mobile</dt><dd><span class="redacted">une blague entre amis</span> · voir fin du dossier</dd></div>
+        </dl>
+      </div>
+      <div class="stats reveal">
+        <div class="stat"><b data-count="17">17</b><span>pistes examinées</span></div>
+        <div class="stat"><b data-count="6">6</b><span>domaines, de Lost à E. coli</span></div>
+        <div class="stat"><b data-count="3">3</b><span>notes corrigées au fact-check</span></div>
+        <div class="stat"><b data-count="1">1</b><span>vérité, avouée par le professeur</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="carnet" style="padding-top:40px">
+    <div class="wrap carnet-wrap">
+      <div class="carnet-caption reveal">
+        <p class="eyebrow">Pièce à conviction n° 1</p>
+        <h2 style="font-size:clamp(34px,4.6vw,56px);font-weight:600;line-height:1">Le carnet d'enquête.</h2>
+        <p>La page d'origine, recopiée au propre. Chaque ligne est une piste : cliquez dessus pour ouvrir l'analyse complète. Les corrections en rouge viennent de notre vérification.</p>
+        <div class="legend">
+          <span class="pill ok">Vérifié</span>
+          <span class="pill warn">Approximatif</span>
+          <span class="pill bad">Corrigé</span>
+          <span class="pill neutral">Coïncidence</span>
+        </div>
+      </div>
+      <div class="paper reveal" role="group" aria-label="Transcription du carnet">
+        <h3>108 : <button class="note" data-id="cavaliers">énigme du jeu des cavaliers</button></h3>
+        <ul>
+          <li>→ <button class="note" data-id="lost">Lost (108 minutes + somme des nombres mystérieux = 108)</button></li>
+          <li>→ <button class="note" data-id="nirvana">108 désirs / illusions terrestres à surmonter pour atteindre le Nirvana</button></li>
+          <li>→ <button class="note" data-id="edward">durée du film Edward aux mains d'argent</button> <span class="corr">≈ 105 min ?</span></li>
+          <li>→ <button class="note" data-id="gagarine">durée de la mission <span class="strike">Apollo 11</span> (vol = 108 min)</button> <span class="corr">Gagarine !</span></li>
+          <li>→ <button class="note" data-id="trpr">108 acides aminés pour la protéine TrpR d'E. coli</button></li>
+          <li>→ <button class="note" data-id="videos">vidéo : 1 fév 2026 → 18 mai 2026, 108 jours de décalage</button> <span class="corr">106 ?</span></li>
+          <li class="sub">↳ <button class="note" data-id="uno">Uno : 108 cartes</button></li>
+          <li>→ <button class="note" data-id="deathnote">108 chapitres de Death Note</button></li>
+          <li>→ <button class="note" data-id="soleil">distance Terre → Soleil = 108 × diamètre du Soleil</button></li>
+          <li>&nbsp;</li>
+          <li>108 : ↳ <button class="note" data-id="binaire">01101100</button> ↳ <button class="note" data-id="hexa">6C</button> ↳ <button class="note" data-id="hyper">1¹×2²×3³</button></li>
+          <li class="sub">↳ <button class="note" data-id="peugeot">Peugeot 108</button> ↳ <button class="note" data-id="pentagone">pentagone (108°) → agent Pentagone</button></li>
+          <li>&nbsp;</li>
+          <li><button class="note" data-id="y1918">2026 − 108 = 1918</button> · <button class="note" data-id="y1914">2022 (agrég) − 108 = 1914</button></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="pistes">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">Synthèse des pistes</p>
+        <h2>Dix-sept façons de tomber sur 108.</h2>
+        <p>Chaque hypothèse est vérifiée, notée et classée. La jauge indique à quel point la piste pourrait expliquer l'obsession du professeur.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Filtrer par domaine" id="filters"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section class="block verite" id="verite">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">Pièce à conviction finale</p>
+        <h2>La vérité est derrière huit bits.</h2>
+        <p>Le rapport final est verrouillé. Pour l'ouvrir, écrivez 108 en binaire. Si vous avez lu le dossier, vous connaissez déjà le code.</p>
+      </div>
+
+      <div class="lock reveal" id="lock">
+        <div>
+          <h3>Serrure binaire</h3>
+          <p>Allumez les bons interrupteurs pour que la somme fasse 108. Astuce : tapez <code style="font-family:var(--mono);color:var(--gold)">108</code> au clavier n'importe où sur la page, par curiosité.</p>
+          <div class="lock-actions">
+            <div class="bits" id="bits" role="group" aria-label="Interrupteurs binaires"></div>
+          </div>
+          <div class="lock-actions">
+            <button class="btn" id="forceLock" type="button">Je donne ma langue au chat</button>
+            <button class="btn" id="resetLock" type="button">Remettre à zéro</button>
+            <span class="lock-status" id="lockStatus" aria-live="polite">Verrouillé</span>
+          </div>
+        </div>
+        <div class="dial" aria-live="polite">
+          <b id="dialVal">0</b>
+          <span>sur 108</span>
+        </div>
+      </div>
+
+      <div class="report reveal">
+        <article class="doc" aria-label="Rapport final">
+          <div class="head"><span>Rapport final · Dossier 108</span><span>Diffusion : la classe</span></div>
+          <span class="stamp">Affaire classée</span>
+          <h3>Conclusions de la commission</h3>
+          <p>Après examen des dix-sept pistes, la commission établit que <span class="rd" style="--i:0">le nombre 108 n'a aucune origine mathématique, historique, spirituelle ni cinématographique</span>. Toutes les coïncidences relevées sont réelles, mais aucune n'est la cause.</p>
+          <p>Interrogé directement, le professeur <span class="rd" style="--i:1">Pablo Espana Guterez</span> a fini par lâcher le morceau : <span class="rd" style="--i:2">108 est une blague entre amis</span>. L'histoire exacte <span class="rd" style="--i:3">reste connue des seuls intéressés</span>, et c'est très bien comme ça.</p>
+          <p>Conclusion : <span class="rd" style="--i:4">pour comprendre 108, il fallait être là.</span></p>
+          <p class="handnote">Et maintenant, chaque fois que vous croiserez un 108, vous penserez à lui. La blague a gagné.</p>
+        </article>
+        <aside class="tally" aria-label="Décompte des hypothèses">
+          <div class="tally-title eyebrow">Décompte des hypothèses</div>
+          <ol id="tally"></ol>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Dossier 108 · Enquête menée par la classe, avec toute notre affection pour le Pr. Espana Guterez.</span>
+    <span><code>108 = 0b01101100 = 0x6C = CVIII</code></span>
+  </div>
+</footer>
+
+<dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
+  <button class="sheet-close" id="sheetClose" type="button" aria-label="Fermer">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+  <div class="sheet-in" id="sheetBody"></div>
+</dialog>
+
+<canvas id="burst" aria-hidden="true"></canvas>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ================= DATA ================= */
+  var V = {
+    ok:{cls:"ok",label:"Vérifié"},
+    warn:{cls:"warn",label:"Approximatif"},
+    bad:{cls:"bad",label:"Corrigé"},
+    neutral:{cls:"neutral",label:"Coïncidence"},
+    origin:{cls:"neutral",label:"Point zéro"}
+  };
+  var PISTES = [
+    {id:"cavaliers",dom:"Divers",short:"Énigme des cavaliers",title:"L'énigme du jeu des cavaliers",fig:"Occurrence n° 1",v:"origin",p:2,
+      blurb:"La toute première apparition consignée. Le nombre surgit au détour d'une énigme sur le jeu des cavaliers.",
+      body:["C'est la première ligne du carnet, soulignée deux fois. La réponse de l'énigme tombait sur 108, et c'est à ce moment que la classe a commencé à se méfier.","À partir de là, chaque 108 croisé en cours ou ailleurs a été noté. Cette piste n'explique rien : elle marque le début de l'enquête."],
+      check:"Sans l'énoncé exact de l'énigme, impossible de dire si 108 était imposé par le problème ou choisi par le professeur. Deuxième option fortement soupçonnée."},
+    {id:"lost",dom:"Pop culture",short:"Lost",title:"Lost",fig:"4 + 8 + 15 + 16 + 23 + 42 = 108",v:"ok",p:4,
+      blurb:"Dans la série, il faut appuyer sur le bouton toutes les 108 minutes. Et les nombres maudits additionnés donnent… 108.",
+      body:["Dans Lost (2004–2010), les rescapés découvrent une station où un compte à rebours de 108 minutes doit être réinitialisé en tapant une suite de nombres.","Ces six nombres, 4, 8, 15, 16, 23 et 42, apparaissent partout dans la série. Leur somme vaut exactement 108."],
+      check:"Double occurrence confirmée : le minuteur et la somme. C'est la piste pop culture la plus solide.", viz:"lost"},
+    {id:"nirvana",dom:"Spiritualité",short:"108 illusions",title:"Les 108 illusions terrestres",fig:"108 kleshas · 108 perles",v:"ok",p:3,
+      blurb:"Dans le bouddhisme, 108 passions ou illusions séparent l'humain du Nirvana. Les chapelets en comptent autant de perles.",
+      body:["La tradition bouddhiste dénombre 108 afflictions (kleshas) à surmonter pour atteindre l'éveil. Les malas, chapelets de méditation, comptent 108 perles, une par récitation.","Au Japon, la cloche des temples sonne 108 fois dans la nuit du Nouvel An pour chasser ces 108 désirs."],
+      check:"Tradition bien documentée, et le nombre sacré le plus connu de la liste. Les perles qui tournent autour du 108 en haut de page en sont un clin d'œil.", viz:"mala"},
+    {id:"edward",dom:"Pop culture",short:"Edward aux mains d'argent",title:"Edward aux mains d'argent",fig:"Tim Burton · 1990",v:"warn",p:1,
+      blurb:"Le carnet affirme que le film dure 108 minutes. Les fiches techniques n'ont pas tout à fait le même avis.",
+      body:["Le conte gothique de Tim Burton, avec Johnny Depp, figure dans le carnet pour sa durée.","Problème : la plupart des fiches indiquent environ 105 minutes. Selon la version, le montage ou le générique, l'écart reste de quelques minutes."],
+      check:"Durée généralement annoncée : 105 min. Piste fragile, sauf si le professeur compte large."},
+    {id:"gagarine",dom:"Sciences",short:"Vol de 108 minutes",title:"Le vol de 108 minutes",fig:"Vostok 1 · 12 avril 1961",v:"bad",p:2,
+      blurb:"Le carnet parle d'Apollo 11, mais le vol de 108 minutes est celui de Youri Gagarine, premier humain dans l'espace.",
+      body:["La mission Apollo 11 (1969) a duré un peu plus de 8 jours, de la Terre à la Lune et retour.","En revanche, le 12 avril 1961, Youri Gagarine fait le tour de la Terre à bord de Vostok 1 en 108 minutes. Le nombre est bien là, mais pas sur la bonne mission."],
+      check:"Corrigé : Apollo 11 ➝ Vostok 1. Le 108 tient toujours, et c'est même l'un des plus célèbres de l'histoire spatiale."},
+    {id:"trpr",dom:"Sciences",short:"Protéine TrpR",title:"La protéine TrpR d'E. coli",fig:"108 acides aminés",v:"ok",p:2,
+      blurb:"Le répresseur du tryptophane chez la bactérie E. coli est une petite protéine de 108 acides aminés.",
+      body:["TrpR régule l'opéron tryptophane : quand le tryptophane est abondant, la protéine se fixe sur l'ADN et coupe la production de l'acide aminé.","Sa séquence compte 108 résidus. La piste la plus pointue du dossier, et donc la plus suspecte : qui connaît ce détail par cœur ?"],
+      check:"Longueur de séquence de référence : 108 acides aminés."},
+    {id:"videos",dom:"Divers",short:"108 jours entre deux vidéos",title:"108 jours entre deux vidéos",fig:"1 fév 2026 → 18 mai 2026",v:"warn",p:3,
+      blurb:"Deux vidéos publiées à 108 jours d'écart. Préméditation ? Le calendrier est plus nuancé.",
+      body:["Le carnet relève deux vidéos, l'une du 1er février 2026, l'autre du 18 mai 2026, et un écart de 108 jours.","Or 2026 n'est pas bissextile : on compte 106 jours entre les deux dates. Refaites le calcul ci-dessous avec d'autres dates si vous doutez."],
+      check:"Écart réel : 106 jours. Presque. Le professeur visait-il 108 et a-t-il raté son coup de deux jours ?", viz:"dates"},
+    {id:"uno",dom:"Divers",short:"Uno : 108 cartes",title:"Uno : 108 cartes",fig:"4 × 25 + 8 = 108",v:"ok",p:2,
+      blurb:"Un jeu de Uno classique compte exactement 108 cartes. Le compte est bon.",
+      body:["Quatre couleurs de 25 cartes chacune (un 0, deux fois chaque chiffre de 1 à 9, deux +2, deux Inversion, deux Passe), plus 8 jokers noirs.","4 × 25 + 8 = 108. Découvert lors de l'enquête sur les vidéos, d'où sa place en retrait dans le carnet."],
+      check:"Édition classique : 108 cartes. Les éditions plus récentes ajoutent quelques cartes spéciales.", viz:"uno"},
+    {id:"deathnote",dom:"Pop culture",short:"Death Note",title:"Death Note",fig:"108 chapitres",v:"ok",p:3,
+      blurb:"Le manga de Tsugumi Ohba et Takeshi Obata tient en exactement 108 chapitres.",
+      body:["Publié de 2003 à 2006, Death Note raconte l'affrontement entre Light Yagami et L. L'histoire se conclut au chapitre 108.","Pour un manga culte sur les indices, les déductions et les coïncidences, c'est presque trop beau."],
+      check:"108 chapitres, 12 volumes. Vérifié."},
+    {id:"soleil",dom:"Sciences",short:"Terre → Soleil",title:"108 Soleils jusqu'à nous",fig:"149,6 M km ÷ 1,39 M km ≈ 107,5",v:"ok",p:2,
+      blurb:"Alignez 108 Soleils côte à côte : vous couvrez à peu près la distance Terre–Soleil.",
+      body:["Distance moyenne Terre–Soleil : environ 149,6 millions de km. Diamètre du Soleil : environ 1,39 million de km. Le rapport donne 107,5.","Bonus : la distance Terre–Lune vaut elle aussi environ 110 diamètres lunaires. C'est pour ça que le Soleil et la Lune paraissent de la même taille dans le ciel."],
+      check:"≈ 107,5, arrondi à 108. Une coïncidence cosmique réelle.", viz:"soleil"},
+    {id:"binaire",dom:"Maths",short:"01101100",title:"En binaire",fig:"0b01101100",v:"ok",p:1,
+      blurb:"64 + 32 + 8 + 4 = 108. Et en ASCII, 108 correspond à la lettre « l » minuscule.",
+      body:["Sur un octet, 108 s'écrit 01101100 : les bits de poids 64, 32, 8 et 4 sont allumés.","En ASCII, le code 108 correspond au caractère « l ». Un message caché ? Probablement pas. Mais retenez bien ce code : il vous servira plus bas."],
+      check:"Conversion exacte. Et c'est la clé de la serrure finale.", viz:"bits"},
+    {id:"hexa",dom:"Maths",short:"0x6C",title:"En hexadécimal",fig:"0x6C",v:"ok",p:1,
+      blurb:"6 × 16 + 12 = 108. En base 16, 108 s'écrit 6C.",
+      body:["En hexadécimal, C vaut 12. Donc 6C = 6 × 16 + 12 = 96 + 12 = 108.","Les développeurs web reconnaîtront peut-être #6C6C6C, un gris neutre. Rien de mystérieux, mais c'est noté."],
+      check:"Conversion exacte.", viz:"hexa"},
+    {id:"hyper",dom:"Maths",short:"1¹ × 2² × 3³",title:"1¹ × 2² × 3³",fig:"1 × 4 × 27 = 108",v:"ok",p:2,
+      blurb:"L'écriture la plus élégante du dossier. 108 est l'hyperfactorielle de 3.",
+      body:["L'hyperfactorielle de n est le produit 1¹ × 2² × … × nⁿ. Pour n = 3 : 1 × 4 × 27 = 108.","C'est aussi 2² × 3³, sa décomposition en facteurs premiers. Un nombre fait uniquement de 2 et de 3."],
+      check:"Exact. Si le professeur est matheux, c'est une excellente raison d'aimer ce nombre.", viz:"hyper"},
+    {id:"peugeot",dom:"Divers",short:"Peugeot 108",title:"La Peugeot 108",fig:"Citadine · 2014–2021",v:"neutral",p:1,
+      blurb:"Petite citadine du constructeur au lion, produite de 2014 à 2021. Le professeur en conduit-il une ?",
+      body:["La Peugeot 108 a succédé à la 107 en 2014, construite en République tchèque avec ses cousines Citroën C1 et Toyota Aygo.","L'enquête n'a trouvé aucune 108 sur le parking. Piste classée, sauf nouvel élément."],
+      check:"La voiture existe bien. Le lien avec le professeur, pas du tout."},
+    {id:"pentagone",dom:"Maths",short:"Agent du Pentagone",title:"Agent du Pentagone",fig:"Angle intérieur : 108°",v:"neutral",p:1,
+      blurb:"Chaque angle intérieur d'un pentagone régulier mesure 108°. Donc le professeur travaille pour le Pentagone. Évidemment.",
+      body:["La somme des angles d'un pentagone vaut (5 − 2) × 180° = 540°. Divisée par 5 : 108° par angle.","Théorie officielle de la classe : 108 est un signe de reconnaissance entre agents. Aucune preuve, mais aucune preuve du contraire non plus."],
+      check:"La géométrie est exacte. La conclusion est entièrement inventée.", viz:"pentagon"},
+    {id:"y1918",dom:"Histoire",short:"2026 − 108 = 1918",title:"2026 − 108 = 1918",fig:"Armistice · 11 novembre 1918",v:"neutral",p:1,
+      blurb:"Retirez 108 à l'année en cours et vous tombez sur la fin de la Première Guerre mondiale.",
+      body:["2026 − 108 = 1918, l'année de l'armistice.","Cette piste va de pair avec la suivante : ensemble, elles encadrent exactement la Grande Guerre. Testez d'autres années ci-dessous."],
+      check:"Calcul exact. Coïncidence calendaire.", viz:"years", year:2026},
+    {id:"y1914",dom:"Histoire",short:"2022 − 108 = 1914",title:"2022 − 108 = 1914",fig:"Agrégation 2022 ↦ 1914",v:"neutral",p:1,
+      blurb:"Retirez 108 à l'année de l'agrégation et vous tombez sur le début de la Grande Guerre.",
+      body:["D'après le carnet, 2022 est l'année de l'agrégation. 2022 − 108 = 1914.","Agrégation en 2022, cours en 2026 : 1914 et 1918, début et fin de la guerre. La symétrie est troublante, mais ne prouve rien."],
+      check:"Calcul exact. L'année de l'agrégation vient de nos notes.", viz:"years", year:2022}
+  ];
+  var DOMAINS = ["Tout","Pop culture","Sciences","Spiritualité","Maths","Histoire","Divers"];
+  var byId = {}; PISTES.forEach(function(p){ byId[p.id]=p; });
+
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+  /* ================= FILTERS + GRID ================= */
+  var grid = document.getElementById("grid");
+  var filters = document.getElementById("filters");
+  var current = "Tout";
+  try { var saved = localStorage.getItem("d108-filter"); if (saved && DOMAINS.indexOf(saved) > -1) current = saved; } catch(e){}
+
+  DOMAINS.forEach(function(d){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "filter"; b.id = "filter-" + DOMAINS.indexOf(d);
+    b.textContent = d; b.setAttribute("aria-pressed", d === current ? "true" : "false");
+    b.addEventListener("click", function(){
+      current = d;
+      try { localStorage.setItem("d108-filter", d); } catch(e){}
+      filters.querySelectorAll(".filter").forEach(function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      renderGrid();
+    });
+    filters.appendChild(b);
+  });
+
+  function dots(n){ var s=""; for (var i=0;i<5;i++) s += '<i class="'+(i<n?"on":"")+'"></i>'; return s; }
+
+  function renderGrid(){
+    var list = PISTES.filter(function(p){ return current === "Tout" || p.dom === current; });
+    grid.innerHTML = list.map(function(p,i){
+      var v = V[p.v];
+      return '<button type="button" class="card" data-id="'+p.id+'" style="animation-delay:'+(i*40)+'ms">'+
+        '<div class="card-top"><span class="tag">'+esc(p.dom)+'</span><span class="pill '+v.cls+'">'+v.label+'</span></div>'+
+        '<div class="fig">'+esc(p.fig)+'</div>'+
+        '<h3>'+esc(p.title)+'</h3>'+
+        '<p>'+esc(p.blurb)+'</p>'+
+        '<div class="meter"><span>Probabilité</span><span class="dots">'+dots(p.p)+'</span></div>'+
+      '</button>';
+    }).join("");
+  }
+  renderGrid();
+
+  grid.addEventListener("click", function(e){
+    var c = e.target.closest(".card"); if (c) openSheet(c.dataset.id);
+  });
+  grid.addEventListener("pointermove", function(e){
+    var c = e.target.closest(".card"); if (!c) return;
+    var r = c.getBoundingClientRect();
+    var x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    c.style.setProperty("--mx", (x*100)+"%"); c.style.setProperty("--my", (y*100)+"%");
+    if (!reduce){ c.style.setProperty("--ry", ((x-.5)*8)+"deg"); c.style.setProperty("--rx", ((.5-y)*8)+"deg"); }
+  });
+  grid.addEventListener("pointerout", function(e){
+    var c = e.target.closest(".card");
+    if (c && !c.contains(e.relatedTarget)){ c.style.setProperty("--rx","0deg"); c.style.setProperty("--ry","0deg"); }
+  });
+
+  document.querySelectorAll(".note").forEach(function(n){
+    n.addEventListener("click", function(){ openSheet(n.dataset.id); });
+  });
+
+  /* ================= SHEET ================= */
+  var sheet = document.getElementById("sheet");
+  var sheetBody = document.getElementById("sheetBody");
+  document.getElementById("sheetClose").addEventListener("click", function(){ sheet.close(); });
+  sheet.addEventListener("click", function(e){ if (e.target === sheet) sheet.close(); });
+
+  function vizHTML(p){
+    var i, out = "";
+    switch(p.viz){
+      case "lost":
+        var n=[4,8,15,16,23,42];
+        out = '<div class="sum">' + n.map(function(x,k){ return '<span style="animation-delay:'+(k*120)+'ms">'+x+'</span>' + (k<5?'<em style="color:var(--faint);font-style:normal">+</em>':''); }).join("") +
+              '<em style="color:var(--faint);font-style:normal">=</em><span class="eq" style="animation-delay:800ms">108</span></div>';
+        return viz("Les nombres de Lost", out);
+      case "mala":
+        var s = '<svg viewBox="0 0 300 300" role="img" aria-label="108 perles disposées en cercle">';
+        for (i=0;i<108;i++){ var a=i/108*Math.PI*2 - Math.PI/2; s += '<circle cx="'+(150+Math.cos(a)*120).toFixed(1)+'" cy="'+(150+Math.sin(a)*120).toFixed(1)+'" r="'+(i===0?7:3.6)+'" fill="'+(i===0?"#5875ff":"#f2cf86")+'" opacity="'+(i===0?1:.85)+'"/>'; }
+        s += '<text x="150" y="162" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-size="44" font-weight="700" fill="#f1efea">108</text></svg>';
+        return viz("Un mala : 108 perles + 1 perle maîtresse", '<div style="max-width:280px;margin:auto">'+s+'</div>');
+      case "dates":
+        return viz("Refaire le calcul",
+          '<div class="field-row"><label class="field" for="d1">Première vidéo<input type="date" id="d1" value="2026-02-01"></label>'+
+          '<label class="field" for="d2">Seconde vidéo<input type="date" id="d2" value="2026-05-18"></label></div>'+
+          '<div class="big-out" id="dOut" style="margin-top:16px">106 jours<small>Il manque 2 jours pour atteindre 108.</small></div>');
+      case "uno":
+        var cols = ["#e5484d","#f5c518","#30a46c","#3e63dd"];
+        out = '<div class="unogrid">';
+        for (i=0;i<108;i++){ var c = i<100 ? cols[Math.floor(i/25)] : "#1b1c22"; out += '<i style="background:'+c+';'+(i>=100?'box-shadow:inset 0 0 0 1px #555;':'')+'animation-delay:'+(i*6)+'ms"></i>'; }
+        return viz("4 couleurs × 25 cartes + 8 jokers", out + '</div>');
+      case "soleil":
+        out = '<div class="dotgrid">';
+        for (i=0;i<108;i++) out += '<i style="animation-delay:'+(i*8)+'ms;'+(i===107?'background:#5875ff;box-shadow:0 0 10px #5875ff':'')+'"></i>';
+        return viz("108 diamètres solaires · le dernier point bleu, c'est nous", out + '</div>');
+      case "bits":
+        var bits="01101100", w=[128,64,32,16,8,4,2,1];
+        out = '<div class="bits-view">' + bits.split("").map(function(b,k){ return '<div><b class="'+(b==="1"?"one":"")+'">'+b+'</b>'+w[k]+'</div>'; }).join("") + '</div>'+
+              '<p style="margin-top:14px;font-family:var(--mono);color:var(--gold)">64 + 32 + 8 + 4 = 108 · ASCII → "l"</p>';
+        return viz("Un octet", out);
+      case "hexa":
+        return viz("Base 16", '<div class="sum"><span>6 × 16</span><em style="color:var(--faint);font-style:normal">+</em><span>C = 12</span><em style="color:var(--faint);font-style:normal">=</em><span class="eq">108</span></div>'+
+          '<div style="margin-top:14px;height:36px;border-radius:10px;background:#6c6c6c;display:grid;place-items:center;font-family:var(--mono);font-size:13px;color:#fff">#6C6C6C</div>');
+      case "hyper":
+        return viz("Hyperfactorielle H(3)", '<div class="sum"><span>1¹ = 1</span><em style="color:var(--faint);font-style:normal">×</em><span>2² = 4</span><em style="color:var(--faint);font-style:normal">×</em><span>3³ = 27</span><em style="color:var(--faint);font-style:normal">=</em><span class="eq">108</span></div>');
+      case "pentagon":
+        var pts=[], arcs="";
+        for (i=0;i<5;i++){ var an = -Math.PI/2 + i*2*Math.PI/5; pts.push([150+Math.cos(an)*100, 140+Math.sin(an)*100]); }
+        pts.forEach(function(pt,k){ var cx=150-pt[0], cy=140-pt[1], L=Math.hypot(cx,cy); var lx=pt[0]+cx/L*34, ly=pt[1]+cy/L*34;
+          arcs += '<circle cx="'+pt[0].toFixed(1)+'" cy="'+pt[1].toFixed(1)+'" r="16" fill="none" stroke="#f2cf86" stroke-width="1.5" stroke-dasharray="3 3"/><text x="'+lx.toFixed(1)+'" y="'+(ly+4).toFixed(1)+'" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#f2cf86">108°</text>'; });
+        out = '<svg viewBox="0 0 300 270" role="img" aria-label="Pentagone régulier, chaque angle mesure 108 degrés"><polygon points="'+pts.map(function(p){return p[0].toFixed(1)+","+p[1].toFixed(1);}).join(" ")+'" fill="rgba(88,117,255,.12)" stroke="#5875ff" stroke-width="2"/>'+arcs+'<text x="150" y="262" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#8f93a0">5 × 108° = 540°</text></svg>';
+        return viz("Pentagone régulier", '<div style="max-width:320px;margin:auto">'+out+'</div>');
+      case "years":
+        return viz("La machine à remonter de 108 ans",
+          '<div class="field-row"><label class="field" for="yearIn">Année de départ<input type="number" id="yearIn" value="'+p.year+'" min="108" max="9999" inputmode="numeric"></label></div>'+
+          '<div class="big-out" id="yearOut" style="margin-top:16px"></div>');
+    }
+    return "";
+  }
+  function viz(label, inner){ return '<div class="viz"><div class="viz-label">'+label+'</div>'+inner+'</div>'; }
+
+  var YEAR_NOTES = {1918:"Armistice du 11 novembre.",1914:"Début de la Première Guerre mondiale.",1917:"Révolutions russes.",1919:"Traité de Versailles.",1920:"Naissance de la SDN.",1916:"Batailles de Verdun et de la Somme.",1915:"L'Italie entre en guerre."};
+
+  function openSheet(id){
+    var p = byId[id]; if (!p) return;
+    var v = V[p.v];
+    sheetBody.innerHTML =
+      '<div class="card-top"><span class="tag">'+esc(p.dom)+'</span><span class="pill '+v.cls+'">'+v.label+'</span></div>'+
+      '<h3 id="sheetTitle">'+esc(p.title)+'</h3>'+
+      '<div class="fig" style="font-family:var(--mono);color:var(--gold)">'+esc(p.fig)+'</div>'+
+      '<div class="body">'+p.body.map(function(t){return "<p>"+esc(t)+"</p>";}).join("")+'</div>'+
+      vizHTML(p)+
+      '<div class="check"><b>Vérification</b>'+esc(p.check)+'</div>'+
+      '<div class="meter"><span>Probabilité que ce soit LA raison</span><span class="dots">'+dots(p.p)+'</span></div>';
+    wireViz(p);
+    if (!sheet.open) { try { sheet.showModal(); } catch(e){ sheet.setAttribute("open",""); } }
+    sheet.scrollTop = 0;
+  }
+
+  function wireViz(p){
+    if (p.viz === "dates"){
+      var d1=document.getElementById("d1"), d2=document.getElementById("d2"), out=document.getElementById("dOut");
+      var calc=function(){
+        var a=Date.parse(d1.value+"T00:00:00Z"), b=Date.parse(d2.value+"T00:00:00Z");
+        if (isNaN(a)||isNaN(b)){ out.innerHTML="—<small>Choisissez deux dates.</small>"; return; }
+        var n=Math.round(Math.abs(b-a)/86400000), diff=108-n;
+        out.innerHTML = n+" jours<small>"+(n===108?"Exactement 108. Le professeur serait fier.":(diff>0?"Il manque "+diff+" jour"+(diff>1?"s":"")+" pour atteindre 108.":(-diff)+" jour"+(-diff>1?"s":"")+" de trop."))+"</small>";
+        if (n===108) burst();
+      };
+      d1.addEventListener("input",calc); d2.addEventListener("input",calc); calc();
+    }
+    if (p.viz === "years"){
+      var yi=document.getElementById("yearIn"), yo=document.getElementById("yearOut");
+      var run=function(){
+        var y=parseInt(yi.value,10);
+        if (isNaN(y)){ yo.innerHTML="—<small>Entrez une année.</small>"; return; }
+        var r=y-108;
+        yo.innerHTML = y+" − 108 = "+r+"<small>"+esc(YEAR_NOTES[r]||"Rien de notable ? Cherchez bien, il y a toujours quelque chose.")+"</small>";
+      };
+      yi.addEventListener("input",run); run();
+    }
+  }
+
+  /* ================= LOCK ================= */
+  var W=[128,64,32,16,8,4,2,1], KEY=[0,1,1,0,1,1,0,0];
+  var state=[0,0,0,0,0,0,0,0], unlocked=false;
+  var bitsEl=document.getElementById("bits"), dialVal=document.getElementById("dialVal"), status=document.getElementById("lockStatus");
+  var verite=document.getElementById("verite");
+  W.forEach(function(w,i){
+    var b=document.createElement("button");
+    b.type="button"; b.className="bit"; b.id="bit-"+i;
+    b.setAttribute("aria-pressed","false"); b.setAttribute("aria-label","Bit de poids "+w);
+    b.innerHTML='<span>0</span><small>'+w+'</small>';
+    b.addEventListener("click",function(){ setBit(i, state[i]?0:1); });
+    bitsEl.appendChild(b);
+  });
+  function setBit(i,v){
+    state[i]=v; var b=document.getElementById("bit-"+i);
+    b.setAttribute("aria-pressed", v?"true":"false"); b.firstChild.textContent = v;
+    update();
+  }
+  function update(){
+    var sum=state.reduce(function(s,b,i){return s+b*W[i];},0);
+    dialVal.textContent=sum;
+    if (sum===108 && !unlocked) unlock();
+    else if (!unlocked) status.textContent = sum>108 ? "Trop haut" : (sum===0 ? "Verrouillé" : "Encore " + (108-sum));
+  }
+  function unlock(){
+    unlocked=true; verite.classList.add("unlocked");
+    status.textContent="Déverrouillé · 0b01101100";
+    burst(); toast("Rapport déclassifié.");
+  }
+  document.getElementById("forceLock").addEventListener("click",function(){
+    KEY.forEach(function(v,i){ setTimeout(function(){ setBit(i,v); }, reduce?0:i*140); });
+  });
+  document.getElementById("resetLock").addEventListener("click",function(){
+    unlocked=false; verite.classList.remove("unlocked");
+    for (var i=0;i<8;i++) setBit(i,0);
+  });
+
+  var tally=document.getElementById("tally");
+  tally.innerHTML = PISTES.map(function(p,i){
+    return '<li style="--i:'+i+'"><span class="lbl"><span class="n">'+String(i+1).padStart(2,"0")+'</span>'+esc(p.short)+'</span><span class="st">Recalée</span></li>';
+  }).join("") + '<li class="win" style="--i:17"><span class="lbl"><span class="n">18</span>La blague entre amis</span><span class="st">Retenue</span></li>';
+
+  /* ================= BURST + TOAST ================= */
+  var bc=document.getElementById("burst"), bx=bc.getContext("2d"), parts=[], running=false;
+  function sizeBurst(){ var d=Math.min(devicePixelRatio||1,2); bc.width=innerWidth*d; bc.height=innerHeight*d; bx.setTransform(d,0,0,d,0,0); }
+  sizeBurst(); addEventListener("resize",sizeBurst);
+  function burst(){
+    if (reduce) return;
+    var cx=innerWidth/2, cy=innerHeight*.45;
+    for (var i=0;i<108;i++){
+      var a=i/108*Math.PI*2, sp=4+Math.random()*7;
+      parts.push({x:cx,y:cy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-3,r:2+Math.random()*3,c:i%9===0?"#5875ff":"#f2cf86",life:1});
+    }
+    if (!running){ running=true; requestAnimationFrame(tick); }
+  }
+  function tick(){
+    bx.clearRect(0,0,innerWidth,innerHeight);
+    parts.forEach(function(p){ p.x+=p.vx; p.y+=p.vy; p.vy+=.18; p.vx*=.985; p.life-=.011;
+      bx.globalAlpha=Math.max(p.life,0); bx.fillStyle=p.c; bx.beginPath(); bx.arc(p.x,p.y,p.r,0,7); bx.fill(); });
+    parts=parts.filter(function(p){return p.life>0;});
+    if (parts.length) requestAnimationFrame(tick); else { running=false; bx.clearRect(0,0,innerWidth,innerHeight); }
+  }
+  var toastEl=document.getElementById("toast"), tt;
+  function toast(msg){ toastEl.textContent=msg; toastEl.classList.add("show"); clearTimeout(tt); tt=setTimeout(function(){toastEl.classList.remove("show");},2600); }
+
+  var buf="";
+  addEventListener("keydown",function(e){
+    var t=e.target; if (t && (t.tagName==="INPUT"||t.tagName==="TEXTAREA"||t.isContentEditable)) return;
+    if (e.key.length!==1) return;
+    buf=(buf+e.key).slice(-3);
+    if (buf==="108"){ burst(); toast("108 détecté. Vous commencez à penser comme lui."); buf=""; }
+  });
+
+  /* ================= PROGRESS ================= */
+  var prog=document.getElementById("progress");
+  function onScroll(){ var h=document.documentElement.scrollHeight-innerHeight; prog.style.transform="scaleX("+(h>0?scrollY/h:0)+")"; }
+  addEventListener("scroll",onScroll,{passive:true}); onScroll();
+})();
+</script>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from "three";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+const hero = document.getElementById("hero");
+const canvas = document.getElementById("gl");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function init(){
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true, powerPreference:"high-performance" });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+  const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+  const root = new THREE.Group(); scene.add(root);
+  const digits = new THREE.Group(); root.add(digits);
+  digits.position.y = 0.55;
+
+  const mat = new THREE.MeshPhysicalMaterial({
+    color:0xdfe3ff, metalness:0.92, roughness:0.2, clearcoat:1, clearcoatRoughness:0.08,
+    iridescence:0.9, iridescenceIOR:1.35, iridescenceThicknessRange:[200,650]
+  });
+  const extrude = { depth:0.46, bevelEnabled:true, bevelThickness:0.08, bevelSize:0.06, bevelSegments:8, curveSegments:72 };
+
+  // "1"
+  const one = new THREE.Shape();
+  one.moveTo(-0.12,-1); one.lineTo(0.28,-1); one.lineTo(0.28,1); one.lineTo(0.02,1);
+  one.lineTo(-0.48,0.6); one.lineTo(-0.34,0.44); one.lineTo(-0.12,0.6); one.closePath();
+
+  // "0"
+  const zero = new THREE.Shape(); zero.absellipse(0,0,0.72,1,0,Math.PI*2,false);
+  const zh = new THREE.Path(); zh.absellipse(0,0,0.36,0.64,0,Math.PI*2,true); zero.holes.push(zh);
+
+  // "8" : union of two ellipses as one outline
+  const T = {cx:0,cy:0.5,rx:0.5,ry:0.5}, B = {cx:0,cy:-0.44,rx:0.62,ry:0.56};
+  const inside = (e,x,y) => ((x-e.cx)/e.rx)**2 + ((y-e.cy)/e.ry)**2 < 1;
+  const pts = [], N = 200;
+  for (let i=0;i<=N;i++){ const t=Math.PI/2 + i/N*Math.PI*2; const x=B.cx+Math.cos(t)*B.rx, y=B.cy+Math.sin(t)*B.ry; if(!inside(T,x,y)) pts.push(new THREE.Vector2(x,y)); }
+  for (let i=0;i<=N;i++){ const t=-Math.PI/2 + i/N*Math.PI*2; const x=T.cx+Math.cos(t)*T.rx, y=T.cy+Math.sin(t)*T.ry; if(!inside(B,x,y)) pts.push(new THREE.Vector2(x,y)); }
+  const eight = new THREE.Shape(pts);
+  const h1 = new THREE.Path(); h1.absellipse(0,0.52,0.22,0.24,0,Math.PI*2,true);
+  const h2 = new THREE.Path(); h2.absellipse(0,-0.44,0.3,0.28,0,Math.PI*2,true);
+  eight.holes.push(h1,h2);
+
+  const holders = [];
+  [[one,-1.85],[zero,0],[eight,1.8]].forEach(([shape,x],i)=>{
+    const g = new THREE.ExtrudeGeometry(shape, extrude); g.center();
+    const m = new THREE.Mesh(g, mat);
+    const h = new THREE.Group(); h.add(m); h.position.x = x;
+    h.userData = { spin:0, spinTarget:0, scale:1, i };
+    m.userData.holder = h;
+    digits.add(h); holders.push(h);
+  });
+
+  // mala : 108 beads
+  const beadGeo = new THREE.SphereGeometry(0.075, 20, 20);
+  const beadMat = new THREE.MeshPhysicalMaterial({ color:0xffffff, metalness:0.65, roughness:0.28, clearcoat:0.6 });
+  const beads = new THREE.InstancedMesh(beadGeo, beadMat, 108);
+  const gold = new THREE.Color(0xf2cf86), blue = new THREE.Color(0x6f88ff);
+  for (let i=0;i<108;i++) beads.setColorAt(i, i===0 ? blue : gold);
+  const ring = new THREE.Group(); ring.rotation.x = 1.18; ring.position.y = 0.55; ring.add(beads); root.add(ring);
+  const dummy = new THREE.Object3D();
+  function layoutBeads(r, t, wob){
+    for (let i=0;i<108;i++){
+      const a = i/108*Math.PI*2;
+      dummy.position.set(Math.cos(a)*r, Math.sin(a)*r, Math.sin(a*6 + t*1.4)*wob);
+      dummy.scale.setScalar(i===0 ? 2.2 : 1);
+      dummy.updateMatrix(); beads.setMatrixAt(i, dummy.matrix);
+    }
+    beads.instanceMatrix.needsUpdate = true;
+  }
+
+  // dust
+  const dustGeo = new THREE.BufferGeometry(); const D = 700; const pos = new Float32Array(D*3);
+  for (let i=0;i<D;i++){ const r = 4 + Math.random()*9, th = Math.random()*Math.PI*2, ph = Math.acos(2*Math.random()-1);
+    pos[i*3]=r*Math.sin(ph)*Math.cos(th); pos[i*3+1]=r*Math.sin(ph)*Math.sin(th); pos[i*3+2]=r*Math.cos(ph)-4; }
+  dustGeo.setAttribute("position", new THREE.BufferAttribute(pos,3));
+  const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color:0x8ea0ff, size:0.03, transparent:true, opacity:0.55, depthWrite:false }));
+  scene.add(dust);
+
+  const key = new THREE.DirectionalLight(0x9fb0ff, 1.4); key.position.set(4,5,6); scene.add(key);
+  const rim = new THREE.PointLight(0xf2cf86, 24, 20); rim.position.set(-4,-2,3); scene.add(rim);
+
+  // sizing
+  let baseZ = 11;
+  function resize(){
+    const w = hero.clientWidth, h = hero.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+    const halfW = 3.9, tan = Math.tan(THREE.MathUtils.degToRad(17.5));
+    baseZ = Math.max(11, halfW/(tan*camera.aspect));
+  }
+  new ResizeObserver(resize).observe(hero); resize();
+
+  // interaction
+  const ray = new THREE.Raycaster(); const ptr = new THREE.Vector2(9,9);
+  let nx=0, ny=0, hovered=null, dragging=false, lastX=0, dragVel=0, dragRot=0;
+  hero.addEventListener("pointermove", e=>{
+    const r = hero.getBoundingClientRect();
+    nx = (e.clientX-r.left)/r.width*2-1; ny = (e.clientY-r.top)/r.height*2-1;
+    ptr.set(nx, -ny);
+    if (dragging){ dragVel = (e.clientX-lastX)*0.006; dragRot += dragVel; lastX = e.clientX; }
+  });
+  hero.addEventListener("pointerleave", ()=>{ ptr.set(9,9); nx=0; ny=0; dragging=false; });
+  canvas.addEventListener("pointerdown", e=>{ dragging=true; lastX=e.clientX; canvas.style.cursor="grabbing"; });
+  addEventListener("pointerup", ()=>{ dragging=false; canvas.style.cursor=""; });
+  canvas.addEventListener("click", ()=>{ if (hovered) hovered.userData.spinTarget += Math.PI*2; });
+
+  let visible = true;
+  new IntersectionObserver(([en])=>{ visible = en.isIntersecting; }).observe(hero);
+
+  let last = performance.now(), t = 0, first = true;
+  function frame(now){
+    requestAnimationFrame(frame);
+    if (!visible) { last = now; return; }
+    const dt = Math.min((now-last)/1000, 0.05); last = now; t += reduce ? 0 : dt;
+
+    const rect = hero.getBoundingClientRect();
+    const p = Math.min(Math.max(-rect.top/rect.height,0),1);
+
+    if (!dragging) { dragRot += dragVel; dragVel *= 0.94; }
+    const ty = nx*0.35 + Math.sin(t*0.35)*0.18 + p*1.4 + dragRot;
+    const tx = ny*0.18 + p*0.35;
+    root.rotation.y += (ty-root.rotation.y)*0.06;
+    root.rotation.x += (tx-root.rotation.x)*0.06;
+
+    ray.setFromCamera(ptr, camera);
+    const hit = ray.intersectObjects(holders.map(h=>h.children[0]))[0];
+    hovered = hit ? hit.object.userData.holder : null;
+    canvas.style.cursor = dragging ? "grabbing" : (hovered ? "pointer" : "grab");
+
+    holders.forEach((h,i)=>{
+      const target = h===hovered ? 1.12 : 1;
+      h.userData.scale += (target-h.userData.scale)*0.12;
+      h.scale.setScalar(h.userData.scale);
+      h.userData.spin += (h.userData.spinTarget-h.userData.spin)*0.06;
+      h.rotation.y = h.userData.spin + (h===hovered ? Math.sin(t*3)*0.08 : 0);
+      h.position.y = Math.sin(t*1.1 + i*1.3)*0.07;
+      h.position.z = (i-1)*p*1.8;
+    });
+
+    ring.rotation.z = t*0.12;
+    layoutBeads(3.4 + p*2.2, t, 0.12 + p*0.4);
+    dust.rotation.y = t*0.02;
+    camera.position.set(0, 0, baseZ + p*3);
+    camera.lookAt(0, 0.2, 0);
+
+    renderer.render(scene, camera);
+    if (first){ first=false; hero.classList.add("gl-ready"); }
+  }
+  requestAnimationFrame(frame);
+}
+
+try { init(); } catch (e) { /* WebGL indisponible : le 108 en CSS reste affiché */ }
+</script>
